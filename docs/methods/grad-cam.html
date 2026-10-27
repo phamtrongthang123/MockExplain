@@ -22,7 +22,7 @@
 <p>Grad-CAM asks: for this input and this output score, which spatial regions have a positive association with that score? It combines a convolutional layer’s feature maps with gradients and produces a coarse heatmap that can be overlaid on an image.</p>
 <h2>The idea</h2>
 <figure class="architecture-figure">
-  <div class="diagram-scroll"><img src="../figures/grad-cam.svg" alt="An image passes through CNN convolution layers to feature maps A superscript k, then through later layers to target score y superscript c. Backpropagation produces gradients of the score with respect to the maps. Averaging over Z positions gives alpha sub k. The weights and feature maps are combined and passed through ReLU to give heatmap L superscript c." width="720" loading="lazy"></div>
+  <div class="diagram-scroll"><img src="../figures/grad-cam.svg?v=1" alt="An image passes through CNN convolution layers to feature maps A superscript k, then through later layers to target score y superscript c. Backpropagation produces gradients of the score with respect to the maps. Averaging over Z positions gives alpha sub k. The weights and feature maps are combined and passed through ReLU to give heatmap L superscript c." width="720" loading="lazy"></div>
   <figcaption>The model produces feature maps and a target score; Grad-CAM uses them to calculate a heatmap. <span class="diagram-hint">Scroll sideways to see the full figure.</span></figcaption>
 </figure>
 

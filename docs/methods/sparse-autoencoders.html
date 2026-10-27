@@ -22,7 +22,7 @@
 <p>A single neuron can respond in several unrelated situations. A sparse autoencoder (SAE) looks for another description of an activation: a larger collection of learned features where only a few features are active for any one input.</p>
 <h2>The idea</h2>
 <figure class="architecture-figure">
-  <div class="diagram-scroll"><img src="../figures/sparse-autoencoders.svg" alt="The model produces activation h, which enters a separate sparse autoencoder. The encoder with W encoder and b encoder and ReLU produces feature strengths f; decoder D and b decoder reconstruct h hat. Training compares h with h hat and penalizes f with weight lambda." width="720" loading="lazy"></div>
+  <div class="diagram-scroll"><img src="../figures/sparse-autoencoders.svg?v=1" alt="The model produces activation h, which enters a separate sparse autoencoder. The encoder with W encoder and b encoder and ReLU produces feature strengths f; decoder D and b decoder reconstruct h hat. Training compares h with h hat and penalizes f with weight lambda." width="720" loading="lazy"></div>
   <figcaption>An SAE is trained separately to reconstruct model activations using sparse features. <span class="diagram-hint">Scroll sideways to see the full figure.</span></figcaption>
 </figure>
 

@@ -22,7 +22,7 @@
 <p>A language model refines its representation as it processes text. The logit lens takes an intermediate activation and applies the model’s final output readout to it. Repeating this across layers gives a series of vocabulary distributions to inspect.</p>
 <h2>The idea</h2>
 <figure class="architecture-figure">
-  <div class="diagram-scroll"><img src="../figures/logit-lens.svg" alt="An intermediate language model activation h at layer ell flows through later layers to the final state and model readout. The logit lens takes the same activation through the reused final normalization and output projection U, then softmax, producing vocabulary distribution p at layer ell." width="720" loading="lazy"></div>
+  <div class="diagram-scroll"><img src="../figures/logit-lens.svg?v=1" alt="An intermediate language model activation h at layer ell flows through later layers to the final state and model readout. The logit lens takes the same activation through the reused final normalization and output projection U, then softmax, producing vocabulary distribution p at layer ell." width="720" loading="lazy"></div>
   <figcaption>The lens taps an intermediate activation and reuses the model’s final readout. <span class="diagram-hint">Scroll sideways to see the full figure.</span></figcaption>
 </figure>
 
