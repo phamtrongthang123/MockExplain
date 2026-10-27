@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#f7faf8">
   <meta name="description" content="See a possible next-token prediction at an intermediate layer.">
   <title>Logit lens · MockExplain</title>
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../style.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../math.js"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
@@ -18,8 +21,8 @@
     <article>
 <p>A language model refines its representation as it processes text. The logit lens takes an intermediate activation and applies the model’s final output readout to it. Repeating this across layers gives a series of vocabulary distributions to inspect.</p>
 <h2>The idea</h2>
-<div class="equation" aria-label="p sub l equals softmax of U applied to the normalized hidden state h sub l"> <i>p</i><sub>ℓ</sub> = softmax(<i>U</i>(norm(<i>h</i><sub>ℓ</sub>)))</div>
-<p><i>h</i><sub>ℓ</sub> is the intermediate activation, norm is the model’s final normalization, and <i>U</i> is its output projection. Softmax converts the resulting token scores into a probability distribution. The exact readout depends on the model architecture.</p>
+<div class="equation" data-tex="p_\ell = \operatorname{softmax}\!\left(U(\operatorname{norm}(h_\ell))\right)"> <i>p</i><sub>ℓ</sub> = softmax(<i>U</i>(norm(<i>h</i><sub>ℓ</sub>)))</div>
+<p><span data-tex="h_{\ell}"><i>h</i><sub>ℓ</sub></span> is the intermediate activation, norm is the model’s final normalization, and <span data-tex="U"><i>U</i></span> is its output projection. Softmax converts the resulting token scores into a probability distribution. The exact readout depends on the model architecture.</p>
 <h2>A tiny example</h2>
 <p>For a toy vocabulary with only “cat” and “dog,” suppose an intermediate readout gives scores [2, 0]. Softmax gives approximately [0.88, 0.12], so “cat” leads in that readout. A later layer may give a different distribution. This is a toy calculation, not a prediction measured from a model.</p>
 <h2>What you need</h2>

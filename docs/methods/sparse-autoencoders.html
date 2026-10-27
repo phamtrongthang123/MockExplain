@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#f7faf8">
   <meta name="description" content="Describe an activation using a small set of learned features.">
   <title>Sparse autoencoders · MockExplain</title>
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../style.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../math.js"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
@@ -18,10 +21,10 @@
     <article>
 <p>A single neuron can respond in several unrelated situations. A sparse autoencoder (SAE) looks for another description of an activation: a larger collection of learned features where only a few features are active for any one input.</p>
 <h2>The idea</h2>
-<p>An encoder turns the model activation <i>h</i> into feature strengths <i>f</i>. A decoder uses those strengths to reconstruct the activation:</p>
-<div class="equation" aria-label="f equals ReLU of encoder W times h plus encoder bias; h hat equals decoder D times f plus decoder bias"><i>f</i> = ReLU(<i>W</i><sub>enc</sub><i>h</i> + <i>b</i><sub>enc</sub>), &nbsp; <i>ĥ</i> = <i>D</i><i>f</i> + <i>b</i><sub>dec</sub></div>
+<p>An encoder turns the model activation <span data-tex="h"><i>h</i></span> into feature strengths <span data-tex="f"><i>f</i></span>. A decoder uses those strengths to reconstruct the activation:</p>
+<div class="equation" data-tex="f = \operatorname{ReLU}(W_{\mathrm{enc}}h + b_{\mathrm{enc}}),\qquad \hat{h} = Df + b_{\mathrm{dec}}"><i>f</i> = ReLU(<i>W</i><sub>enc</sub><i>h</i> + <i>b</i><sub>enc</sub>), &nbsp; <i>ĥ</i> = <i>D</i><i>f</i> + <i>b</i><sub>dec</sub></div>
 <p>One common training objective balances reconstruction error with a sparsity penalty:</p>
-<div class="equation" aria-label="loss equals squared reconstruction error plus lambda times the L1 norm of feature activations">loss = ‖<i>h</i> − <i>ĥ</i>‖² + λ‖<i>f</i>‖<sub>1</sub></div>
+<div class="equation" data-tex="\mathrm{loss} = \lVert h-\hat{h}\rVert^2 + \lambda\lVert f\rVert_1">loss = ‖<i>h</i> − <i>ĥ</i>‖² + λ‖<i>f</i>‖<sub>1</sub></div>
 <p>The first term rewards a close reconstruction. The second discourages large numbers of active features; λ controls the tradeoff. SAE designs and sparsity penalties vary.</p>
 <h2>A tiny example</h2>
 <p>Suppose two decoder features are directions [1, 0] and [0, 1]. Feature strengths [2, 0] reconstruct [2, 0]: only the first feature is active. In a real SAE, researchers inspect many examples that activate a feature to form a hypothesis about its meaning.</p>

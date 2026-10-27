@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#f7faf8">
   <meta name="description" content="Compare the internal values a model produces for different inputs.">
   <title>Activation inspection · MockExplain</title>
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../style.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../math.js"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
@@ -19,8 +22,8 @@
 <p>Activations are the intermediate values produced while a model processes an input. Inspecting them can help locate where two inputs begin to produce different internal patterns. This is a family of techniques rather than one particular algorithm.</p>
 <h2>The idea</h2>
 <p>For a simple layer, a common calculation is:</p>
-<div class="equation" aria-label="h equals ReLU of W x plus b"><i>h</i> = ReLU(<i>W</i><i>x</i> + <i>b</i>)</div>
-<p><i>x</i> is the layer’s input, <i>W</i> its weights, <i>b</i> a bias, and <i>h</i> the output activation. ReLU replaces negative values with zero. Transformer components use other operations too; this equation is just a small example.</p>
+<div class="equation" data-tex="h = \operatorname{ReLU}(Wx + b)"><i>h</i> = ReLU(<i>W</i><i>x</i> + <i>b</i>)</div>
+<p><span data-tex="x"><i>x</i></span> is the layer’s input, <span data-tex="W"><i>W</i></span> its weights, <span data-tex="b"><i>b</i></span> a bias, and <span data-tex="h"><i>h</i></span> the output activation. ReLU replaces negative values with zero. Transformer components use other operations too; this equation is just a small example.</p>
 <h2>A tiny example</h2>
 <p>If the values before ReLU are [−1, 2], the resulting activation is [0, 2]. For another input, [3, −1] becomes [3, 0]. The two inputs activate different coordinates in this toy layer. In practice, you might compare activations across examples, layers, or attention heads.</p>
 <h2>What you need</h2>

@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#f7faf8">
   <meta name="description" content="Make a heatmap for a chosen model output.">
   <title>Grad-CAM · MockExplain</title>
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../style.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../math.js"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
@@ -19,9 +22,9 @@
 <p>Grad-CAM asks: for this input and this output score, which spatial regions have a positive association with that score? It combines a convolutional layer’s feature maps with gradients and produces a coarse heatmap that can be overlaid on an image.</p>
 <h2>The idea</h2>
 <p>First, average the gradient of the chosen score over each feature map. Then use those averages to combine the maps:</p>
-<div class="equation" aria-label="alpha k equals one over Z times the sum over i and j of the derivative of the score y with respect to feature map A k i j">α<sub>k</sub> = (1 / <i>Z</i>) Σ<sub>i,j</sub> ∂<i>y</i><sup>c</sup> / ∂<i>A</i><sup>k</sup><sub>ij</sub></div>
-<div class="equation" aria-label="heatmap L equals ReLU of the sum over k of alpha k times feature map A k"><i>L</i><sup>c</sup> = ReLU(Σ<sub>k</sub> α<sub>k</sub><i>A</i><sup>k</sup>)</div>
-<p><i>y</i><sup>c</sup> is the chosen output score (usually before softmax), <i>A</i><sup>k</sup> is feature map <i>k</i>, and <i>Z</i> is its number of spatial positions. ReLU keeps positive values and sets negative values to zero.</p>
+<div class="equation" data-tex="\alpha_k = \frac{1}{Z}\sum_{i,j}\frac{\partial y^c}{\partial A^k_{ij}}">α<sub>k</sub> = (1 / <i>Z</i>) Σ<sub>i,j</sub> ∂<i>y</i><sup>c</sup> / ∂<i>A</i><sup>k</sup><sub>ij</sub></div>
+<div class="equation" data-tex="L^c = \operatorname{ReLU}\!\left(\sum_k \alpha_k A^k\right)"><i>L</i><sup>c</sup> = ReLU(Σ<sub>k</sub> α<sub>k</sub><i>A</i><sup>k</sup>)</div>
+<p><span data-tex="y^{c}"><i>y</i><sup>c</sup></span> is the chosen output score (usually before softmax), <span data-tex="A^{k}"><i>A</i><sup>k</sup></span> is feature map <span data-tex="k"><i>k</i></span>, and <span data-tex="Z"><i>Z</i></span> is its number of spatial positions. ReLU keeps positive values and sets negative values to zero.</p>
 <h2>A tiny example</h2>
 <p>At one location, suppose two feature maps have values 3 and 1 and their gradient weights are 2 and −1. The heatmap value is ReLU(2 × 3 − 1 × 1) = <strong>5</strong>. Repeating this at each location gives a map; the map is typically resized to the input image.</p>
 <h2>What you need</h2>

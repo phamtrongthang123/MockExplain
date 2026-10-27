@@ -6,7 +6,10 @@
   <meta name="theme-color" content="#f7faf8">
   <meta name="description" content="Read an intermediate activation in vocabulary space.">
   <title>J-lens · MockExplain</title>
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
   <link rel="stylesheet" href="../style.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../math.js"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
@@ -19,9 +22,9 @@
 <p>The Jacobian lens, or J-lens, is a way to examine an internal language-model activation as a ranked list of tokens. It asks which tokens that activation is, on average across contexts, disposed to make the model say. The readout is an approximation, not a transcript of everything the model represents.</p>
 <h2>The idea</h2>
 <p>A Jacobian describes how a small change to an activation affects a later activation. J-lens averages these local derivatives across a corpus and uses the resulting matrix to map an intermediate activation into the final-layer space. In a simplified form:</p>
-<div class="equation" aria-label="J sub l equals the average derivative of the final hidden state with respect to h sub l"> <i>J</i><sub>ℓ</sub> = average(∂<i>h</i><sub>final</sub> / ∂<i>h</i><sub>ℓ</sub>)</div>
-<div class="equation" aria-label="token scores approximately equal W U times J sub l times h sub l">scores ≈ <i>W</i><sub>U</sub> <i>J</i><sub>ℓ</sub> <i>h</i><sub>ℓ</sub></div>
-<p><i>h</i><sub>ℓ</sub> is the activation at layer ℓ, <i>J</i><sub>ℓ</sub> is the averaged mapping, and <i>W</i><sub>U</sub> maps the result to token scores. The first equation omits the details of averaging across prompts and token positions.</p>
+<div class="equation" data-tex="J_\ell = \operatorname{average}\!\left(\frac{\partial h_{\mathrm{final}}}{\partial h_\ell}\right)"> <i>J</i><sub>ℓ</sub> = average(∂<i>h</i><sub>final</sub> / ∂<i>h</i><sub>ℓ</sub>)</div>
+<div class="equation" data-tex="\mathrm{scores} \approx W_U J_\ell h_\ell">scores ≈ <i>W</i><sub>U</sub> <i>J</i><sub>ℓ</sub> <i>h</i><sub>ℓ</sub></div>
+<p><span data-tex="h_{\ell}"><i>h</i><sub>ℓ</sub></span> is the activation at layer ℓ, <span data-tex="J_{\ell}"><i>J</i><sub>ℓ</sub></span> is the averaged mapping, and <span data-tex="W_{U}"><i>W</i><sub>U</sub></span> maps the result to token scores. The first equation omits the details of averaging across prompts and token positions.</p>
 <h2>A tiny example</h2>
 <p>Imagine a two-dimensional activation [2, 1] and a fitted mapping that swaps its coordinates. The mapped vector is [1, 2]. If a toy output readout assigns one token to each coordinate, the second token receives the higher score. Real lenses use many dimensions and vocabulary tokens.</p>
 <h2>What you need</h2>
