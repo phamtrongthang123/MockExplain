@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="Interpretability methods currently suggested by MockExplain.">
+  <title>Suggested methods · MockExplain</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">MockExplain <span>docs</span></a>
+    <a href="index.html">← User guide</a>
+  </header>
+  <div class="layout" id="top">
+    <nav aria-label="On this page">
+      <p>Methods</p>
+      <a href="#cnn">CNNs</a>
+      <a href="#transformers">Transformers</a>
+      <a href="#selection">How suggestions are chosen</a>
+      <a href="index.html">← User guide</a>
+    </nav>
+    <main>
+      <section class="intro">
+        <div class="eyebrow">DOCUMENTATION · V0.1</div>
+        <h1>Suggested methods</h1>
+        <p>Methods currently covered by MockExplain and where to read more.</p>
+        <p class="note">These are suggestions based on structural clues. MockExplain does not run the methods.</p>
+      </section>
+      <section id="cnn">
+        <div class="section-label">CONVOLUTION</div><h2>CNNs</h2>
+        <div class="feature-grid">
+          <article><h3>Filter inspection</h3><p>Look at convolution kernels. <a href="https://distill.pub/2020/circuits/visualizing-weights/">Visualizing Weights ↗</a></p></article>
+          <article><h3>Grad-CAM</h3><p>Highlight image regions associated with an output. <a href="https://arxiv.org/abs/1610.02391">Paper ↗</a></p></article>
+        </div>
+      </section>
+      <section id="transformers">
+        <div class="section-label">ATTENTION</div><h2>Transformers</h2>
+        <div class="feature-grid">
+          <article><h3>J-lens</h3><p>Read language-model activations in vocabulary space. <a href="https://arxiv.org/abs/2607.15495">Paper ↗</a> · <a href="https://github.com/anthropics/jacobian-lens">Code ↗</a></p></article>
+          <article><h3>Logit lens</h3><p>Read intermediate activations as vocabulary predictions. <a href="https://arxiv.org/abs/2303.08112">Tuned Lens paper ↗</a> · <a href="https://github.com/AlignmentResearch/tuned-lens/blob/main/tuned_lens/nn/lenses.py">Code ↗</a></p></article>
+          <article><h3>Sparse autoencoders (SAEs)</h3><p>Find sparse features in model activations. <a href="https://arxiv.org/abs/2309.08600">Paper ↗</a></p></article>
+          <article><h3>Activation inspection</h3><p>Inspect activations at layers or heads. <a href="https://github.com/TransformerLensOrg/TransformerLens">TransformerLens ↗</a></p></article>
+        </div>
+      </section>
+      <section id="selection">
+        <div class="section-label">RULES</div><h2>How suggestions are chosen</h2>
+        <ul>
+          <li>Convolution clues suggest filter inspection and Grad-CAM.</li>
+          <li>Attention clues suggest SAEs and activation inspection. When embeddings and a possible vocabulary head are also found, J-lens and logit lens replace activation inspection.</li>
+          <li>For convolution-and-attention hybrids, suggestions are limited to filter inspection, Grad-CAM, J-lens when language clues are present, and SAEs.</li>
+          <li>Unknown structures receive no method suggestion.</li>
+        </ul>
+        <p>Clues are not proof of model family or method compatibility. Open <strong>Details</strong> in the app for each method’s requirements and limits.</p>
+        <p>Rule version: <code>mockexplain-rules-0.1.1</code>.</p>
+      </section>
+      <footer>MockExplain · <a href="index.html">User guide</a> · <a href="https://github.com/phamtrongthang123/MockExplain">Source on GitHub ↗</a></footer>
+    </main>
+  </div>
+</body>
+</html>
