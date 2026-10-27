@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="Features and a getting-started guide for MockExplain.">
+  <title>MockExplain documentation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top">MockExplain <span>docs</span></a>
+    <a href="https://github.com/phamtrongthang123/MockExplain">GitHub ↗</a>
+  </header>
+  <div class="layout" id="top">
+    <nav aria-label="On this page">
+      <p>On this page</p>
+      <a href="#features">Features</a>
+      <a href="#start">Get started</a>
+      <a href="#examples">Try the examples</a>
+      <a href="#your-model">Use your own model</a>
+      <a href="#limits">Limits</a>
+    </nav>
+    <main>
+      <section class="intro">
+        <div class="eyebrow">DOCUMENTATION · V0.1</div>
+        <h1>MockExplain documentation</h1>
+        <p>Inspect a model and find interpretability methods and papers to explore.</p>
+        <div class="actions"><a class="button primary" href="#start">Get started <span>↓</span></a><a class="button" href="https://github.com/phamtrongthang123/MockExplain/blob/main/MockExplain_Demo.mp4">Watch the demo ↗</a></div>
+      </section>
+      <section id="features">
+        <div class="section-label">01 / OVERVIEW</div><h2>Features</h2>
+        <div class="feature-grid">
+          <article><span>01</span><h3>Inspect a model</h3><p>Read a PyTorch state dictionary, Python architecture, or both. Add a JSON config for context.</p></article>
+          <article><span>02</span><h3>Find a method</h3><p>Get short suggestions with links to papers and articles. Open details for requirements and limits.</p></article>
+          <article><span>03</span><h3>Compare profiles</h3><p>Upload multiple models, switch between them, and compare their summaries.</p></article>
+          <article><span>04</span><h3>Save reports</h3><p>Export JSON or Markdown. Reopen JSON reports in the app later.</p></article>
+        </div>
+        <p class="note">Runs locally. No PyTorch, GPU, or API key required. MockExplain suggests methods; it does not run them.</p>
+      </section>
+      <section id="start">
+        <div class="section-label">02 / SETUP</div><h2>Get started</h2>
+        <p>Install Python 3.10 or newer, then run these commands in a terminal:</p>
+        <pre><code>git clone https://github.com/phamtrongthang123/MockExplain.git
+cd MockExplain
+python3 -m mockexplain</code></pre>
+        <p>Open <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>. Keep the terminal open while using the app; press <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop it.</p>
+        <p>If port 8000 is busy, run <code>python3 -m mockexplain --port 8001</code> and open <code>http://127.0.0.1:8001</code>.</p>
+      </section>
+      <section id="examples">
+        <div class="section-label">03 / WALKTHROUGH</div><h2>Try the examples</h2>
+        <div class="steps">
+          <article><span class="step-number">1</span><div><h3>Upload a CNN</h3><p>Click <strong>Upload model</strong> and select <code>examples/tiny_cnn.pt</code> from the cloned repository.</p><p>In <strong>Model overview</strong>, expand the tensor or weight-sample sections. Under <strong>Suggested methods</strong>, open the Grad-CAM paper or select <strong>Details</strong>.</p></div></article>
+          <article><span class="step-number">2</span><div><h3>Compare a transformer</h3><p>Upload <code>examples/transformer.py</code>. Explore its suggestions, then click <strong>Compare profiles</strong>. Use <strong>Model profile</strong> in the header to switch between models.</p></div></article>
+          <article><span class="step-number">3</span><div><h3>Save a report</h3><p>Choose <strong>Save JSON report</strong> to save a report you can reopen with <strong>Open saved report</strong>, or <strong>Save Markdown</strong> for a readable copy. Profiles stay in the current browser tab, so save before refreshing or closing it.</p></div></article>
+        </div>
+      </section>
+      <section id="your-model">
+        <div class="section-label">04 / YOUR MODEL</div><h2>Use your own model</h2>
+        <p>Choose <strong>Upload model</strong> to select a <code>.pt</code> checkpoint, a <code>.py</code> architecture, or both, with an optional JSON config. <strong>Upload folder</strong> collects these formats from a folder; it must contain at most one of each. Combined uploads are limited to 128 MiB.</p>
+        <p>If you upload weights first, use <strong>Attach .py / config</strong> to add context in a new profile. The original profile stays available. MockExplain does not verify that the attached files match the checkpoint.</p>
+      </section>
+      <section id="limits">
+        <div class="section-label">05 / GOOD TO KNOW</div><h2>Limits</h2>
+        <ul><li>The <code>.pt</code> reader supports ordinary uncompressed PyTorch tensor state dictionaries. Full serialized models, sharded checkpoints, and safetensors are unsupported.</li><li>A model family is inferred from structural clues. Unknown structures may not receive a suggestion.</li><li>Weight statistics cover samples; suggestions are not measured results.</li></ul>
+        <p>See the <a href="https://github.com/phamtrongthang123/MockExplain#supported-inspection-and-safety-bounds">README</a> for supported formats and inspection limits.</p>
+      </section>
+      <footer>MockExplain · <a href="https://github.com/phamtrongthang123/MockExplain">Source on GitHub ↗</a></footer>
+    </main>
+  </div>
+</body>
+</html>

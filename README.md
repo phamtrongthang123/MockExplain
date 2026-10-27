@@ -6,7 +6,7 @@ Upload model weights and architecture to get structural insights and suggestions
 for interpretability methods: LLM => J-lens, SAE, etc.; CNN => Grad-CAM, etc.
 The user does not need to input a prompt.
 
-[User guide](docs/user-guide.md) · [Demo video](MockExplain_Demo.mp4) · [Specification](spec.md)
+[Documentation](https://phamtrongthang123.github.io/MockExplain/) · [Demo video](MockExplain_Demo.mp4) · [Specification](spec.md)
 
 ## Launch locally
 
