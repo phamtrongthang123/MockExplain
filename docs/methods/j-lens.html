@@ -21,6 +21,11 @@
     <article>
 <p>The Jacobian lens, or J-lens, is a way to examine an internal language-model activation as a ranked list of tokens. It asks which tokens that activation is, on average across contexts, disposed to make the model say. The readout is an approximation, not a transcript of everything the model represents.</p>
 <h2>The idea</h2>
+<figure class="architecture-figure">
+  <div class="diagram-scroll"><img src="../figures/j-lens.svg" alt="The language model maps intermediate activation h at layer ell through later layers to final activation h final and the output head W U. The lens takes the same intermediate activation, applies J at layer ell, then reuses W U to produce token scores. The map J is fitted by averaging Jacobians across a corpus and positions." width="720" loading="lazy"></div>
+  <figcaption>J-lens reads an intermediate activation using a separately fitted map and the model’s output head. <span class="diagram-hint">Scroll sideways to see the full figure.</span></figcaption>
+</figure>
+
 <p>A Jacobian describes how a small change to an activation affects a later activation. J-lens averages these local derivatives across a corpus and uses the resulting matrix to map an intermediate activation into the final-layer space. In a simplified form:</p>
 <div class="equation" data-tex="J_\ell = \operatorname{average}\!\left(\frac{\partial h_{\mathrm{final}}}{\partial h_\ell}\right)"> <i>J</i><sub>ℓ</sub> = average(∂<i>h</i><sub>final</sub> / ∂<i>h</i><sub>ℓ</sub>)</div>
 <div class="equation" data-tex="\mathrm{scores} \approx W_U J_\ell h_\ell">scores ≈ <i>W</i><sub>U</sub> <i>J</i><sub>ℓ</sub> <i>h</i><sub>ℓ</sub></div>

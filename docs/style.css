@@ -6,3 +6,4 @@
 @media(max-width:900px){.layout{display:block;padding:0 20px}nav{position:static;display:flex;flex-direction:row;overflow:auto;white-space:nowrap;gap:16px;padding-top:20px}nav p{display:none}}
 .article-page{width:min(100%,760px)}
 .equation{text-align:center;white-space:normal}.equation .katex-display{margin:0;overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.architecture-figure{margin:22px 0 26px}.diagram-scroll{overflow-x:auto;overscroll-behavior-x:contain;border-radius:14px}.diagram-scroll img{display:block;width:100%;min-width:640px;height:auto}.architecture-figure figcaption{margin:10px 2px 0;color:#607068;font-size:13px;line-height:1.5}.diagram-hint{display:none}@media(max-width:690px){.diagram-hint{display:block;margin-top:4px}}

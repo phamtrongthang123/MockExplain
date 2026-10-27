@@ -21,6 +21,11 @@
     <article>
 <p>A convolutional layer applies small sets of weights, called <strong>filters</strong>, across an input. Each filter produces a feature map: a value at every position where it was applied. Looking at the weights is a way to ask what kind of local pattern a filter may respond to.</p>
 <h2>The idea</h2>
+<figure class="architecture-figure">
+  <div class="diagram-scroll"><img src="../figures/filter-inspection.svg" alt="An input patch x with values 1, 2, 3 and a convolution filter w with values minus 1, 0, 1 feed a multiply-and-sum operation to produce y equal to 2 in the feature map." width="720" loading="lazy"></div>
+  <figcaption>The input patch x and learned filter w are multiplied and summed to give one output y. <span class="diagram-hint">Scroll sideways to see the full figure.</span></figcaption>
+</figure>
+
 <p>At one position, the layer multiplies each input value in a local patch by the corresponding weight and adds the results. In a simplified one-dimensional example, ignoring bias:</p>
 <div class="equation" data-tex="y = x_1 w_1 + x_2 w_2 + x_3 w_3"><i>y</i> = <i>x</i><sub>1</sub><i>w</i><sub>1</sub> + <i>x</i><sub>2</sub><i>w</i><sub>2</sub> + <i>x</i><sub>3</sub><i>w</i><sub>3</sub></div>
 <p>Here <span data-tex="x"><i>x</i></span> is the input patch, <span data-tex="w"><i>w</i></span> the filter, and <span data-tex="y"><i>y</i></span> the resulting value. For patch [1, 2, 3] and filter [−1, 0, 1], the result is −1 + 0 + 3 = <strong>2</strong>. The filter responds to a change across the patch. Real image filters usually have two spatial dimensions and multiple channels.</p>

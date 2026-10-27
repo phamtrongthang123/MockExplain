@@ -21,6 +21,11 @@
     <article>
 <p>Activations are the intermediate values produced while a model processes an input. Inspecting them can help locate where two inputs begin to produce different internal patterns. This is a family of techniques rather than one particular algorithm.</p>
 <h2>The idea</h2>
+<figure class="architecture-figure">
+  <div class="diagram-scroll"><img src="../figures/activation-inspection.svg" alt="Layer input x enters an affine operation with weights W and bias b. ReLU is applied to the result to produce activation h. Example pre-activation minus 1, 2 becomes 0, 2." width="720" loading="lazy"></div>
+  <figcaption>A simple layer transforms an input x into an activation h. <span class="diagram-hint">Scroll sideways to see the full figure.</span></figcaption>
+</figure>
+
 <p>For a simple layer, a common calculation is:</p>
 <div class="equation" data-tex="h = \operatorname{ReLU}(Wx + b)"><i>h</i> = ReLU(<i>W</i><i>x</i> + <i>b</i>)</div>
 <p><span data-tex="x"><i>x</i></span> is the layer’s input, <span data-tex="W"><i>W</i></span> its weights, <span data-tex="b"><i>b</i></span> a bias, and <span data-tex="h"><i>h</i></span> the output activation. ReLU replaces negative values with zero. Transformer components use other operations too; this equation is just a small example.</p>
