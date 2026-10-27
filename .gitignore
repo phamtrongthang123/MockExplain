@@ -1,73 +1,37 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Environments
+# Local configuration and environments
 .env
-.venv
+.env.*
+!.env.example
+.venv/
 env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# IDE & Editor
 .vscode/
 .idea/
-*.swp
-*.swo
+.DS_Store
 
-# Weights, Checkpoints & Large Data
+# Agent instructions, memory, and working notes
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+SOURCES.md
+STATE.md
+.agents/
+.claude/
+.codex/
+.cursor/
+.hindsight/
+
+# Python caches and build outputs
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Uploaded models and generated artifacts
 *.pt
 *.pth
 *.bin
@@ -76,17 +40,10 @@ venv.bak/
 checkpoints/
 weights/
 data/
-datasets/
-models_cache/
-.cache/
+uploads/
+reports/
+artifacts/
 
-# Experiment outputs & reports (local test runs)
-runs/
-experiments/
-*.html
-!docs/*.html
-!examples/*.html
-!autoexplain/web/static/*.html
-
-# Video demo recordings
-recipes/demos/
+# Small, trusted tensor-only examples and safety regression fixtures
+!examples/tiny_cnn.pt
+!tests/fixtures/*.pt

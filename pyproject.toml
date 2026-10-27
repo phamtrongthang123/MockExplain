@@ -3,72 +3,28 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "autoexplain"
-version = "0.1.0a0"
-description = "Autonomous Agentic Explainable AI (XAI) Platform: Investigate, explain, test, and refine deep-learning models."
+name = "mockexplain"
+version = "0.1.0"
+description = "A meta study in a software form: inspect model weights and architecture to suggest interpretability methods."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
     { name = "Trong Thang Pham", email = "phamtrongthang123@gmail.com" }
 ]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-]
-dependencies = [
-    "torch>=2.0.0",
-    "transformers>=4.40.0",
-    "accelerate>=0.28.0",
-    "numpy>=1.24.0",
-    "pandas>=2.0.0",
-    "pydantic>=2.0.0",
-    "rich>=13.0.0",
-    "click>=8.0.0",
-    "jinja2>=3.1.0",
-    "transformer_lens>=3.9.0,<4.0.0",
-    "fastapi>=0.100.0",
-    "uvicorn>=0.20.0",
-    "python-multipart>=0.0.6",
-    "httpx>=0.24.0",
-]
-
-[project.optional-dependencies]
-sae = [
-    "sae-lens>=3.0.0",
-]
-dev = [
-    "pytest>=8.0.0",
-    "pytest-cov>=4.1.0",
-    "ruff>=0.4.0",
-    "mypy>=1.9.0",
-]
-all = [
-    "autoexplain[sae,dev]",
-]
-
-[project.scripts]
-autoexplain = "autoexplain.cli:main"
+dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/phamtrongthang123/AutoExplain"
-Repository = "https://github.com/phamtrongthang123/AutoExplain"
-Issues = "https://github.com/phamtrongthang123/AutoExplain/issues"
+Homepage = "https://github.com/phamtrongthang123/MockExplain"
+Repository = "https://github.com/phamtrongthang123/MockExplain"
+Issues = "https://github.com/phamtrongthang123/MockExplain/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["autoexplain*"]
+include = ["mockexplain*"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
+[project.scripts]
+mockexplain = "mockexplain.server:main"
 
-[tool.ruff.lint]
-select = ["E", "F", "I", "W"]
-ignore = ["E501"]
+[tool.setuptools.package-data]
+mockexplain = ["static/*"]

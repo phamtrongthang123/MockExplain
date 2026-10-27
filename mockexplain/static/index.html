@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F7FAF8">
+  <title>MockExplain — Model insights</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand"><a href="/">MockExplain<span>v0.1</span></a><p>A meta study in a software form.</p></div>
+    <div class="controls">
+      <label class="select-label" for="models">Model profile</label>
+      <select id="models" aria-label="Model profile"><option value="">No model uploaded</option></select>
+      <button id="upload" class="primary">Upload model</button>
+      <button id="upload-folder">Upload folder</button>
+      <button id="open-report">Open saved report</button>
+      <input id="files" type="file" accept=".pt,.py,.json" multiple hidden>
+      <input id="folder" type="file" webkitdirectory multiple hidden>
+      <input id="report-file" type="file" accept=".json" multiple hidden>
+      <input id="attachment" type="file" accept=".py,.json" multiple hidden>
+    </div>
+  </header>
+  <main>
+    <div id="status" class="visually-hidden" role="status" aria-live="polite"></div>
+    <div id="toolbar" class="toolbar" hidden>
+      <div class="actions"><button id="attach">Attach .py / config</button><button id="export-json">Save JSON report</button><button id="export-md">Save Markdown</button><button id="compare">Compare profiles</button></div>
+    </div>
+    <div class="cards" id="cards">
+      <section class="card" aria-labelledby="overview-title"><div class="card-heading"><span class="number">1</span><h2 id="overview-title">Model overview</h2></div><div id="overview"></div></section>
+      <section class="card" aria-labelledby="methods-title"><div class="card-heading"><span class="number">2</span><h2 id="methods-title">Suggested methods</h2></div><div id="methods"></div></section>
+    </div>
+  </main>
+  <dialog id="comparison" aria-labelledby="comparison-title"><div class="dialog-heading"><h2 id="comparison-title">Compare model profiles</h2><button id="close-comparison" aria-label="Close comparison">Close</button></div><label for="compare-left">First model</label><select id="compare-left"></select><label for="compare-right">Second model</label><select id="compare-right"></select><div id="comparison-content"></div></dialog>
+</body>
+</html>

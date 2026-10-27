@@ -1,0 +1,1 @@
+{"model_type":"example-decoder","architectures":["TinyLanguageTransformer"],"hidden_size":16,"num_hidden_layers":1,"num_attention_heads":2,"vocab_size":64,"is_decoder":true}

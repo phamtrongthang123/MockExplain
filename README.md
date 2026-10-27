@@ -1,71 +1,167 @@
-# AutoExplain
+# MockExplain
 
-AutoExplain is a minimal, persistent XAI browser harness for neural networks.
+“A meta study in a software form.”
 
-Instead of writing one-off forward hooks for every experiment, you control model execution through a browser-style automation interface. A single persistent session loads model weights once and supports repeated inspect-observe-intervene cycles without reinitialization.
+Upload model weights and architecture to get structural insights and suggestions
+for interpretability methods: LLM => J-lens, SAE, etc.; CNN => Grad-CAM, etc.
+The user does not need to input a prompt.
 
-## Public API Actions
+[Specification and architecture diagram](spec.md) · [Demo video](MockExplain_Demo.mp4)
 
-| Action | Responsibility |
-|---|---|
-| `open_model()` | Load a Transformer into memory |
-| `inspect()` | Inspect architecture, layers, and heads |
-| `run()` | Run model inference |
-| `observe()` | Inspect internal activations, attention, and logits |
-| `intervene()` | Modify internal activations |
-| `reset()` | Restore baseline behavior |
-| `evaluate()` | Compare baseline and modified behavior |
-| `record()` | Save experiment results |
+## Launch locally
 
-## Quick Start
+Requires Python 3.10 or newer and a modern browser. **No runtime dependencies**:
+no PyTorch install, API keys, external LLM calls, model downloads, or GPU.
 
-```python
-from autoexplain import Harness
-
-h = Harness()
-h.open_model("gpt2")
-
-h.inspect()
-
-baseline = h.run("Alice gave Bob a book.")
-h.observe(layer=5)
-
-h.intervene(layer=5, head=3, method="zero")
-modified = h.run("Alice gave Bob a book.")
-
-h.reset()
-
-result = h.evaluate(baseline, modified)
-h.record("experiment_001")
-```
-
-Run the included GPT-2 demonstration:
+From a fresh checkout, run this one launch command:
 
 ```bash
-python examples/gpt2.py
+python3 -m mockexplain
 ```
 
-## How It Works
+Open **http://127.0.0.1:8000**. Stop with Ctrl+C. If the port is busy, use
+`python3 -m mockexplain --port 8001`.
 
-- **Persistent Model Instance**: `open_model("gpt2")` loads the Transformer into memory once. Model weights persist across runs, interventions, and evaluations.
-- **Genuine Head Interventions**: `intervene(layer=5, head=3, method="zero")` configures forward hooks on the attention head output tensor (`hook_z`).
-- **Numerical Evaluation**: `evaluate(baseline, modified)` measures actual output differences, including max logit difference, mean difference, cosine similarity, and KL divergence.
-- **Fast Reset**: `reset()` clears active intervention hooks without reloading weights, restoring baseline outputs within float precision.
-- **Experiment Records**: `record(id)` writes the prompt, intervention parameters, evaluation metrics, and top token predictions to a JSON file.
+For installation outside the checkout, optionally run `python3 -m pip install .`
+in a virtual environment first; the same launch command works from any directory.
+The installed package includes the browser assets. There is also a `mockexplain`
+console command. No build step or frontend toolchain is needed to use the app.
 
-## Installation
+## Use
+
+1. Click **Upload model**. Select one `.pt` checkpoint, one `.py` architecture,
+   or both together. You can include one JSON configuration file. **Upload folder**
+   collects these formats from a model folder; unrelated files are ignored. A
+   folder must contain at most one file per supported format.
+2. Read **Model overview** and **Suggested methods**. Expand the tensor inventory,
+   source declarations, weight samples, structural clues, coverage, and missing
+   information. Open a paper or article directly, or click **Details** for the reason,
+   prerequisites, limitations, and any additional sources.
+3. Upload another model and switch profiles in the header. Pending and failed
+   uploads have their own state; they never display another model's results.
+4. **Attach .py / config** adds or replaces source/configuration in a new profile,
+   retaining the earlier profile for comparison. Attachments provide independent
+   context; their correspondence with checkpoint weights is unverified.
+5. **Save JSON report** preserves the full profile, hashes, facts, sample coverage,
+   reader/rule versions, missing information, recommendations, and references.
+   **Save Markdown** provides a readable report with the same inspection content.
+   **Open saved report** restores exported JSON without re-reading model files.
+   **Compare profiles** compares facts, coverage, and methods without experiments.
+
+Profiles live in the current browser tab (up to twelve); save reports before
+refreshing or closing it. Remove a profile to free a slot. Nothing is stored on
+the server or sent to an external service. Saved reports are user-provided data,
+not authenticated findings; reopening one does not reverify the original files.
+Reupload original files to add attachments to an imported report.
+
+## Try real examples
+
+These are explicitly small examples, not findings about your own checkpoint:
+
+- [`examples/cnn.py`](examples/cnn.py): convolution, normalization, and output-layer
+  constructor declarations → filter inspection and Grad-CAM suggestions.
+- [`examples/transformer.py`](examples/transformer.py): attention, embeddings, and a
+  vocabulary-head candidate → J-lens, plain vocabulary readout, and SAE suggestions.
+- [`examples/tiny_cnn.pt`](examples/tiny_cnn.pt): a real, tensor-only PyTorch
+  state_dict with 9 entries and 293 tensor elements, including normalization buffers.
+- [`examples/unknown.py`](examples/unknown.py): readable linear declarations with
+  no covered method rule. MockExplain keeps this case unknown.
+- [`examples/config.json`](examples/config.json): optional declared configuration;
+  attach to a model rather than uploading it alone.
+
+The `.pt` example and regression fixtures were generated by
+[`tools/make_fixtures.py`](tools/make_fixtures.py) with CPU PyTorch 2.14.1.
+They require no PyTorch to inspect. Regeneration is an optional developer operation;
+no model forward pass, training, gradients, or fitting is performed.
+
+## Supported inspection and safety bounds
+
+| Input | Behavior and bounds |
+| --- | --- |
+| `.py` | Parse UTF-8 Python with `ast`; never import, compile, or execute it. Up to 512 KiB / 50,000 AST nodes. Recognize a curated set of convolution, attention, embedding, linear, and normalization `torch.nn` constructors and import aliases. Record literal arguments and class/call-site declarations. |
+| `.pt` | Read ordinary uncompressed `torch.save` ZIP tensor state dictionaries, including `OrderedDict` version metadata or a `state_dict` / `model_state_dict` wrapper. Use an allowlisted metadata opcode interpreter that constructs only inert records and builtin containers. No pickle callable is executed and there is no unrestricted fallback. |
+| Tensor metadata | Read all supported entries before any sampling: names, shapes, strides, element counts, dtype, recorded device, and unique raw storage size. Support dense float16/32/64, bfloat16, bool, int8/16/32/64, uint8; strided views, offsets, shared storage, scalar and empty tensors. Recorded CUDA devices do not allocate GPU memory. |
+| Tensor samples | At most 32 tensors, 256 deterministic evenly spaced logical values each, and 64 KiB raw sample bytes. Show sampled min/max/mean, zeros, and nonfinite counts. Unread values/tensors remain explicitly outside sample coverage. |
+| `.json` config | Optional finite JSON object, up to 128 KiB. Show selected model/dimension declarations as unverified context; configuration claims alone do not trigger method rules. |
+| Overall | One file per format; at most three files and 128 MiB combined. Checkpoint metadata ≤2 MiB, ≤200,000 opcodes, ≤10,000 tensors, ≤12,000 ZIP entries. Reject compressed/encrypted ZIPs, invalid extents, or unsupported object constructors. JSON report import ≤32 MiB. |
+
+The server binds only to `127.0.0.1`, accepts local same-origin uploads, and serves
+a fixed asset list. It handles one inspection at a time to keep resource use
+bounded. Upload bytes are held in memory for that request; file-size bounds apply
+to the entire upload, while weight *statistics* read only the bounded samples.
+Ordinary pickle protocols 2, 4, and 5 are covered by real PyTorch fixtures;
+unrecognized metadata opcodes are rejected. The checkpoint metadata CRC is checked. Unsampled storage bytes are not scanned
+or CRC-verified; this is structural inspection rather than a full integrity check.
+
+## What the result means
+
+**Observed facts** are directly read tensor metadata, bounded sample values, and
+source declarations. **Inferences** are candidates based on names, shapes, and
+constructor call sites. **Suggested methods** are literature guidance selected by
+small explicit `if` / `elif` rules (`mockexplain-rules-0.1.1`). The same inspected
+information and rule version produce the same recommendations.
+
+A state_dict may contain buffers, tied aliases, or only part of a model. Its tensor
+element total is therefore displayed separately from **trainable parameter count**,
+which remains unknown. Source declarations may be conditional, unused, repeated by
+loops, or spread across imported code. They do not establish instantiated layer
+count, execution order, runtime tensor shapes, or parameter totals.
+
+Convolution clues select filter inspection and Grad-CAM. Attention without enough
+vocabulary clues selects SAE and activation inspection. Attention plus embeddings
+and a named vocabulary head selects language-transformer candidates and J-lens,
+plain vocabulary readout, and SAE. Hybrids receive up to four suggestions spanning
+both components. Unknown structures receive no invented generic method list.
+
+Each suggestion links to its paper or other source.
+The plain logit lens uses the model's existing normalization/unembedding and needs
+no trained translator; a tuned lens needs fitted translators. J-lens uses a
+compatible pre-fitted Jacobian transport or a corpus-based fitting step. SAEs need
+compatible trained artifacts or additional training. Grad-CAM needs suitable
+activations, an input, a target output, and gradients. These are prerequisites for
+future work: **MockExplain only suggests methods; it does not run them.**
+
+## Limitations
+
+- Folder selection supports a single checkpoint, architecture file, and config,
+  rather than resolving multi-file Python packages or arbitrary model frameworks. Legacy raw pickles, full serialized modules, TorchScript, custom
+  tensor subclasses, sparse/quantized/complex tensors, sharded checkpoints,
+  safetensors, and checkpoints above the bounds are unsupported. Export trusted
+  weights as `torch.save(model.state_dict(), path)` in your own environment.
+  Do not load an untrusted pickle to convert it.
+- Weights alone may not identify architecture. A rank-4 weight can suggest a
+  convolution without proving one; names and source/configuration can disagree.
+  Attach relevant context and inspect the evidence rather than treating the
+  inferred family as a verified model identity.
+- Samples are deterministic, not random; their ranges and zero proportions do
+  not establish the full distribution, sparsity, quality, or training history.
+- The app does not measure activations, gradients, causal effects, neuron meaning,
+  inference behavior, or method compatibility. No training or interpreter fitting
+  happens. The retired prompt-driven AutoExplain workflow remains retired.
+
+## Development checks
+
+Core tests use only Python's standard library; state/race tests use Node 18+:
 
 ```bash
-git clone https://github.com/phamtrongthang123/AutoExplain.git
-cd AutoExplain
-pip install -e ".[dev]"
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+node --test tests/test_state.mjs
 ```
 
-## Running Tests
+For the actual browser workflow, install optional test tooling in a development
+virtual environment, then run:
 
 ```bash
-pytest -v
+python3 -m pip install playwright
+python3 -m playwright install chromium
+python3 tests/browser_checks.py
 ```
+
+Set `CHROMIUM_EXECUTABLE` to reuse an installed Chromium if needed. Browser checks
+exercise real uploads, loading and switching races, attachments, unknown and unsafe
+files, JSON/Markdown downloads, saved-report import/comparison, and desktop/mobile
+layout. Screenshots and downloaded reports go to `/tmp/mockexplain-browser` by
+default (`MOCKEXPLAIN_BROWSER_ARTIFACTS` overrides it).
 
 ## License
 

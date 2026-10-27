@@ -1,129 +1,106 @@
-# AutoExplain — Feature Roadmap v0.1
+# MockExplain — User stories and usage
 
-## Frontend (UX First)
-Start by creating `autoexplain/web/fixtures/neuronpedia_mock.json` with the extracted Neuronpedia mock data, and build `autoexplain/web/app.py` + `autoexplain/web/static/index.html` (Unsloth Light Theme) wired to that JSON fixture. Make sure `pytest tests/test_web_ux.py` passes before touching any PyTorch/GPU backend code.
+- **The idea, in my words**
+  - “Many of the insights can be extracted from simply looking at model weights and architecture.”
+  - “Like naively, LLM => use J-lens, SAE, etc. CNN => use Grad-CAM, etc.”
+  - “Think of this as a meta study in a software form.”
+  - “I want a lightweight heuristic if else if possible.”
+  - “The user doesn't need to input their prompt at all.”
 
-### Core User Stories
+- **As a user uploading a new model, I want MockExplain to tell me what I am looking at.**
+  - I upload a checkpoint or a model folder containing its weights and architecture/configuration.
+  - There is a option to upload simply the python file of model architecture for analysis.
+  - MockExplain reads the available architecture and tensor information and gives me a model overview.
+  - I do not have to type a prompt, describe my task, choose a research question, or supply example inputs to receive insights and suggestions.
+  - If a bare checkpoint does not identify its architecture, MockExplain shows what it can read and lets me attach the configuration. It keeps unknown information visible.
 
-1. **The Streaming Explorer (Anytime Streaming Discovery):**
-   - AutoExplain operates as an anytime streaming discovery engine—like search autocomplete—surfacing the first actionable concept suggestions within 5 seconds of loading a model rather than blocking on an exhaustive batch pipeline. Every 5 seconds, background exploration streams higher-ranked candidates, refines evidence, and promotes causally verified steering interventions as they become available. Users can interact with, inspect, or apply steering to any current result immediately without ever waiting for the search to finish.
+- **As a user, I want useful insights from the weights and architecture themselves.**
+  - Show the model family, layer structure, tensor shapes, parameter count, dtype, and storage size when these can be established.
+  - Point out structures such as convolution kernels, attention blocks, embeddings, output heads, and normalization layers when the available information supports them.
+  - Show simple weight statistics, such as value ranges or the proportion of zeros, when a cheap inspection is possible.
+  - Read tensor metadata first. Use bounded CPU samples for weight statistics and label sampled results. Do not require a full weight scan or a loaded execution model.
+  - Tell me which facts came directly from the checkpoint, which are inferred from its structure, and which information is missing.
 
-2. **The Interpreter (Reading Internal Meaning):**
-   - *"As a user inspecting a prompt, I want to click any word and read a plain-English description of the concept firing at that word, without sifting through layer numbers, feature IDs, or histograms."*
+- **As a user, I want a lightweight heuristic to suggest which interpretability methods make sense for my model.**
+  - If it is an LLM, suggest methods such as J-lens, SAE, vocabulary readouts, or activation analysis, depending on its structure and the method's requirements.
+  - If it is a CNN, suggest methods such as Grad-CAM or convolution-filter inspection, depending on its structure and the method's requirements.
+  - If it has both convolutional and transformer components, suggest methods for the relevant components.
+  - If the model does not match a known case, show the structural facts that are available and say that a method recommendation is not yet covered.
+  - Use a small, curated `if` / `elif` rule set. The same inspected information and rule version should give the same suggestions.
+  - Start with a few short suggestions and direct links to papers or other sources. I can click for the reason, requirements, and limitations.
 
-3. **The Steerer (Causal Editing):**
-   - *"As a user testing how the model works, I want to suppress an active thought or type a new thought in plain English (e.g., `'Japan and Tokyo'`) and see the Default vs. Steered output side by side."*
+- **As a user, I want this to feel like a meta study in a software form.**
+  - Bring together what existing research says about interpreting models with these structures.
+  - For each suggested method, explain what it helps investigate, why it is relevant here, what it requires, and what its limitations are.
+  - Link the suggestion to its paper, documentation, or implementation.
+  - For example, an LLM may be a candidate for [J-lens](https://github.com/anthropics/jacobian-lens), but using it requires a compatible fitted lens or a fitting step.
+  - A CNN may be a candidate for [Grad-CAM](https://arxiv.org/abs/1610.02391), but producing a heatmap requires an input, a target output, suitable feature maps, and gradients.
+  - SAE and NLA suggestions explain the need for compatible trained artifacts or additional training.
+  - I can receive these recommendations without running the methods or supplying the inputs they would need for an experiment.
+  - Show the distinction between a structural fact, a method recommendation, and a result measured by running that method. A recommendation does not establish what a particular neuron means.
 
-4. **The Cross-Model Experimenter (Save Steer & Switch `.pt` Model):**
-   - *"As a user with multiple checkpoints, I want to save a working steering vector inside the Steer card, switch to another `.pt` model (via a header switcher / `.pt` upload placeholder), and apply that saved steering vector to see its effect on the new model. Because the user may want to know "Do the same interpretability patterns hold consistently across architectures, model sizes, and training conditions?"."*
+- **As a user opening the app, I want a simple upload-and-read experience.**
+  - The main action is uploading or selecting a model.
+  - Use two main cards: **1. Model overview** and **2. Suggested methods**.
+  - Keep checkpoint switching in the header. Keep the overview and recommendations readable, with details available by clicking.
+  - Keep the Unsloth Studio Light Theme: sage-white background `#F7FAF8`, white cards `#FFFFFF`, emerald controls `#10B981`, and dark text `#111815`.
+  - I should not land on a prompt box, token-inspection exercise, steering form, or research-question wizard.
+  - A labeled example model can demonstrate the experience before I upload anything. Its example information must not be presented as findings about my checkpoint.
 
-5. **The Investigator (Testing Interpretations):**
-   - *"As a user investigating a model's internal mechanisms, I want to inspect the original neurons and circuits, form hypotheses about their functions, and test those hypotheses through interventions, so I can distinguish plausible interpretations from causally supported explanations."*
+- **As a user working with many checkpoints, I want the suggestions to follow the model I uploaded.**
+  - Uploading another checkpoint produces its own overview and method recommendations.
+  - I can save a report containing the inspected facts, suggested methods, reasons, references, and any missing information.
+  - I can compare saved model profiles without rerunning an interpretability experiment.
+  - Reports identify the checkpoint, inspection coverage, and rule version. Results from a previous model must not be silently attached to the new one.
 
-### 6. The Librarian (Navigating Internal Knowledge). This usecase is long because I like it the most.
+- **As a user, this is the usage I expect.**
+  - Upload an LLM checkpoint: see its readable structure and weight summary, then suggestions such as J-lens or SAE with their reasons and requirements.
+  - Upload a CNN checkpoint: see its readable structure and weight summary, then suggestions such as Grad-CAM with their reasons and requirements.
+  - Upload an unfamiliar or incomplete checkpoint: see what MockExplain could inspect and what information is still needed.
+  - Get useful guidance from the model itself, without entering a prompt or spending big compute on discovery.
 
-- *"As a researcher exploring an unfamiliar neural network, I want to ask natural-language questions about where information is represented, how internal features are related, and how the network organizes its representations, so I can navigate and understand the model without already knowing which neurons, layers, or circuits to inspect."*
+- **Project name and current state**
+  - The project and repository are named **MockExplain**.
+  - This specification replaces the earlier prompt-driven advisor and automatic-discovery specifications.
+  - The old prompt-based prototype has been retired. MockExplain v0.1 now implements bounded model readers, versioned heuristic rules, and the upload-only interface described here; see README.md for supported formats, validation, and limitations.
 
-**Example questions:**
-- "Where does the model represent information about cats?"
-- "Why do these neurons respond to both cats and cars?"
-- "How are related concepts organized across layers?"
-- "Which other features are connected to this representation?"
-
-**Expected behavior:**
-- Find relevant neurons, features, and circuits.
-- Discover shared patterns and relationships between representations.
-- Explain findings in plain language, with supporting evidence.
-- Distinguish observed correlations from causally validated explanations.
-- Acknowledge uncertainty when the internal organization is not yet understood.
-
-**Design principle:** AutoExplain should help users discover how a network is already organized, rather than assuming its representations must first be disentangled or reorganized.
-
-**Reference:** [Neural Networks Are Already Clean — Goodfire](https://already-clean.goodfire.com/)
-
----
-
-### 1. User Goals (What the user wants to accomplish)
-
-- **Understand *why* a model outputs a specific answer:** See which words in a prompt trigger strong internal activations and what those activations mean in plain human language.
-- **Test *"What if?"* interventions effortlessly:** Modify what the model is thinking mid-sentence and observe whether the model's final text actually changes as expected.
-- **Save and reuse steering vectors across models:** Save an effective steering intervention as a reusable preset pill and test it after switching/uploading another `.pt` checkpoint.
-- **Avoid tool overwhelm:** Get straight to insight and steering without learning mechanistic interpretability jargon (SAE dictionary sizes, cosine similarity, or logit tables).
-
----
-
-### 2. Expected Outcomes (What success looks like)
-
-| User Action | Expected Outcome in the UI |
-| :--- | :--- |
-| **Opens the webapp URL** | The page loads directly into a working example (`"The capital of France is"`) with token highlights already visible—no login, no setup wizard, no blank screen. |
-| **Clicks a word pill (e.g., `"is"` or `"France"`)** | **Card 1 (`1. Interpret`)** immediately displays the plain-English concept firing at that token (e.g., *"Predicting 'Paris' as the capital city of France"*). |
-| **Suppresses a thought or enters a new concept (e.g., `"Tokyo / Japan"`)** | **Card 2 (`2. Steer`)** updates the side-by-side comparison box, showing the **Default Model Output** (`"...is Paris"`) next to the **Steered Model Output** (`"...is Tokyo"`). |
-| **Clicks `Save Steer` in Card 2** | Saves the current steering vector/concept as a clickable preset pill inside Card 2 (e.g., `📌 Tokyo Steer`). |
-| **Uploads a `.pt` file (placeholder) or switches the model pill in the header** | Updates the active model badge in the top bar (e.g., `gpt2-base.pt` $\to$ `custom_weights.pt`) and lets the user click any saved steer pill to test it on the newly selected model. |
-
----
-
-### 3. Constraints (Rules the design must obey)
-
-- **The "Anti-Neuronpedia" Simplicity Constraint:**
-  - Maximum of **2 main cards** on the screen (`1. Interpret` and `2. Steer`). Saved steering vectors and `.pt` model switching must live as lightweight pills inside Card 2 and the Top Header—never as a 3rd card or complex sidebar.
-  - Zero visible math formulas, activation histograms, top/bottom token logit tables, or raw layer/neuron coordinates (`L8 · N14209`).
-- **Cold-Start Constraint (Mock-Data First):**
-  - The frontend must function completely offline/CPU-only using lightweight extracted Neuronpedia JSON data (plus a working `.pt` upload placeholder) before any live GPU model is wired up.
-- **Interaction Constraint:**
-  - Every user input must be either a **single click** (selecting a word pill, clicking `+ Steer`, clicking `Save Steer`, dragging a `Suppress / Boost` slider) or **plain English text** (typing a prompt or a steering concept).
-- **Visual Constraint:**
-  - Strictly **Unsloth Studio Light Theme** (soft sage-white background `#F7FAF8`, pure white cards `#FFFFFF`, emerald-green interactive highlights `#10B981`, high-contrast dark text `#111815`).
-
----
 
 ## Backend
 
-AutoExplain provides eight actions on a loaded model, which map directly to the 2-card UI:
+block 1: input
+block 2: analysis:
+if input is .pt then read both architecture and weight and match to our heuristic
+if input is .py architecture only then read arch and match our heuristic
+block 3: return result.
 
-- `open_model` & `inspect` → Top Header (`.pt` upload placeholder & model selector)
-- `run` & `observe` → Card 1 (`1. Interpret` prompt execution & token thought readout)
-- `intervene`, `evaluate`, `reset`, & `record` → Card 2 (`2. Steer` live comparison, reset, and saving steering vectors across models)
+### Simple architecture
+
+```mermaid
+flowchart LR
+    subgraph INPUT["1. Input"]
+        PT[".pt checkpoint"]
+        PY[".py architecture"]
+    end
+
+    subgraph ANALYSIS["2. Analysis"]
+        W["Read weights and<br/>available architecture"]
+        A["Read architecture<br/>without executing code"]
+        H["Lightweight if / else rules<br/>LLM → J-lens, SAE, etc.<br/>CNN → Grad-CAM, etc."]
+
+        W --> H
+        A --> H
+    end
+
+    subgraph RESULT["3. Result"]
+        R["Model overview<br/>Suggested methods<br/>Reasons and requirements"]
+    end
+
+    PT --> W
+    PY --> A
+    H --> R
+
+    classDef default fill:#FFFFFF,stroke:#10B981,color:#111815
+    style INPUT fill:#F7FAF8,stroke:#D1D5DB
+    style ANALYSIS fill:#F7FAF8,stroke:#D1D5DB
+    style RESULT fill:#F7FAF8,stroke:#D1D5DB
 ```
-              ┌──────────────────────────────────────────────┐
-              │              AutoExplain Harness             │
-              │ open_model · inspect · run · observe         │
-              │ intervene  · reset   · evaluate · record     │
-              └──────────────────────┬───────────────────────┘
-                                     │
-    ┌───────────────┬────────────────┼───────────────┬───────────────┐
-    │               │                │               │               │
-    ▼               ▼                ▼               ▼               ▼
-┌─────────┐    ┌───────────┐    ┌───────────┐   ┌───────────┐   ┌───────────┐
-│   SAE   │    │ Jacobian  │    │    NLA    │   │Block-Spar.│   │ Manifold  │ ... (Methods)
-│ Sparse  │    │  Readouts │    │Activation │   │Multidim.  │   │ Steering  │
-│Features │    │           │    │  Language │   │ Concepts  │   │ Intervene │
-└─────────┘    └───────────┘    └───────────┘   └───────────┘   └───────────┘
-```
-
----
-
-## AI-Based Heuristic Search & Pre-Flight Estimator
-
-AutoExplain functions as an anytime streaming discovery engine powered by an AI-based heuristic search planner, avoiding blind, expensive brute-force passes across neural architectures.
-
-### 1. Literature Knowledge Base (Paper-to-Rule Engine)
-- **Architecture Profiling:** Automatically extracts model geometry ($d_{\text{model}}$, layer count, attention heads, activation functions, residual stream dimensions).
-- **Paper-Informed Rules:** Maps architectural patterns to proven interpretability methods based on top-tier literature (e.g., Anthropic, Goodfire, OpenAI, TransformerLens):
-  - *Small Residual Streams (e.g., GPT-2 small):* Prioritize mid-to-late residual stream sparse autoencoders (Layers 7–9) for clean entity prediction concepts.
-  - *Wide/Deeper LLMs (e.g., Llama-style, Mistral):* Prioritize transcoder representations and block-sparse multidimensional concepts.
-  - *Dense Attention Networks:* Use Jacobian readout and attention attribution heads for fast syntax and relational bound identification.
-
-### 2. Pre-Flight "Cost vs. Yield" Estimator
-Before the user commits compute resources or waits on deep analysis, AutoExplain computes an instant pre-flight estimate to inform the user before paying tremendous search time:
-- **Estimated Runtime:** Compares instant heuristic lookup ($\le 5\text{s}$), targeted verification ($\approx 10\text{--}15\text{s}$), and full dictionary sweeps ($> 10\text{min}$).
-- **Resource Footprint:** Estimates VRAM usage and memory requirements to proactively prevent Out-Of-Memory (OOM) failures.
-- **Expected Concept Yield & Steerability Score:** Predicts the likelihood of discovering clean, causally steerable concepts without causing perplexity degradation or collateral damage.
-
-### 3. Progressive Anytime Priority Scheduling
-Execution is prioritized by the ratio of $\frac{\text{Expected Yield}}{\text{Compute Cost}}$:
-- **0s — Model Profiling & Triage:** Architectural rules match the checkpoint and initialize the pre-flight estimate card.
-- **5s — Fast Heuristic Path:** Surfaces first candidate concepts using lightweight heuristics, cached dictionaries, or sparse projections.
-- **10s–15s — Targeted Verification:** Runs minimal causal intervention tests to validate candidate stability.
-- **Deep Search (Optional / On-Demand):** Expands to full dictionary training, multidimensional sweeps, or exhaustive causal tracing only when explicitly requested.
