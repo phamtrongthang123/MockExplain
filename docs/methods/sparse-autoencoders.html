@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="Describe an activation using a small set of learned features.">
+  <title>Sparse autoencoders · MockExplain</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
+  <main class="article-page">
+    <p class="article-back"><a href="../methods.html">← Suggested methods</a></p>
+    <div class="eyebrow">METHOD GUIDE</div>
+    <h1>Sparse autoencoders</h1>
+    <p class="article-lead">Describe an activation using a small set of learned features.</p>
+    <article>
+<p>A single neuron can respond in several unrelated situations. A sparse autoencoder (SAE) looks for another description of an activation: a larger collection of learned features where only a few features are active for any one input.</p>
+<h2>The idea</h2>
+<p>An encoder turns the model activation <i>h</i> into feature strengths <i>f</i>. A decoder uses those strengths to reconstruct the activation:</p>
+<div class="equation" aria-label="f equals ReLU of encoder W times h plus encoder bias; h hat equals decoder D times f plus decoder bias"><i>f</i> = ReLU(<i>W</i><sub>enc</sub><i>h</i> + <i>b</i><sub>enc</sub>), &nbsp; <i>ĥ</i> = <i>D</i><i>f</i> + <i>b</i><sub>dec</sub></div>
+<p>One common training objective balances reconstruction error with a sparsity penalty:</p>
+<div class="equation" aria-label="loss equals squared reconstruction error plus lambda times the L1 norm of feature activations">loss = ‖<i>h</i> − <i>ĥ</i>‖² + λ‖<i>f</i>‖<sub>1</sub></div>
+<p>The first term rewards a close reconstruction. The second discourages large numbers of active features; λ controls the tradeoff. SAE designs and sparsity penalties vary.</p>
+<h2>A tiny example</h2>
+<p>Suppose two decoder features are directions [1, 0] and [0, 1]. Feature strengths [2, 0] reconstruct [2, 0]: only the first feature is active. In a real SAE, researchers inspect many examples that activate a feature to form a hypothesis about its meaning.</p>
+<h2>What you need</h2>
+<p>Representative activations and an SAE trained for the model and layer, or data and compute to train one. Features may be ambiguous or split across several directions; a plausible label alone does not establish a feature’s causal role.</p>
+</article>
+    <div class="article-sources"><strong>Read more:</strong> <a href="https://arxiv.org/abs/2309.08600">Sparse Autoencoders Find Highly Interpretable Features ↗</a></div>
+    <footer>MockExplain · <a href="../methods.html">All methods</a> · <a href="../index.html">User guide</a></footer>
+  </main>
+</body>
+</html>

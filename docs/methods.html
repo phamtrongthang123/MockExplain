@@ -33,11 +33,11 @@
         <div class="feature-grid">
           <article>
             <h3>Filter inspection</h3><p>Look at convolution kernels. <a href="https://distill.pub/2020/circuits/visualizing-weights/">Visualizing Weights ↗</a></p>
-            <details><summary>Learn more</summary><p>A convolution filter is a small set of weights applied across an input. Visualizing first-layer filters can reveal patterns such as edges or colors. Later filters combine learned features and are harder to interpret by looking at weights alone.</p><p><strong>Needs:</strong> Convolution weights and their layout; no example input is required.</p></details>
+            <p class="article-link"><a href="methods/filter-inspection.html">Read the guide →</a></p>
           </article>
           <article>
             <h3>Grad-CAM</h3><p>Highlight image regions associated with an output. <a href="https://arxiv.org/abs/1610.02391">Paper ↗</a></p>
-            <details><summary>Learn more</summary><p>For a chosen image and output, Grad-CAM uses gradients to weight convolutional feature maps and produces a heatmap. For example, it can show which parts of a photo are associated with a “cat” score.</p><p><strong>Needs:</strong> A runnable model, input, target output, feature maps, and gradients. The map is coarse and does not prove causation.</p></details>
+            <p class="article-link"><a href="methods/grad-cam.html">Read the guide →</a></p>
           </article>
         </div>
       </section>
@@ -46,19 +46,19 @@
         <div class="feature-grid">
           <article>
             <h3>J-lens</h3><p>Read language-model activations in vocabulary space. <a href="https://arxiv.org/abs/2607.15495">Paper ↗</a> · <a href="https://github.com/anthropics/jacobian-lens">Code ↗</a></p>
-            <details><summary>Learn more</summary><p>The Jacobian lens maps an intermediate activation toward the model’s output space using an average of how later layers respond to small changes. It then ranks vocabulary tokens associated with that activation.</p><p><strong>Needs:</strong> A compatible model, tokenizer, input, activations, and a fitted lens. Its token readout is approximate and may miss concepts that span multiple tokens.</p></details>
+            <p class="article-link"><a href="methods/j-lens.html">Read the guide →</a></p>
           </article>
           <article>
             <h3>Logit lens</h3><p>Read intermediate activations as vocabulary predictions. <a href="https://arxiv.org/abs/2303.08112">Tuned Lens paper ↗</a> · <a href="https://github.com/AlignmentResearch/tuned-lens/blob/main/tuned_lens/nn/lenses.py">Code ↗</a></p>
-            <details><summary>Learn more</summary><p>The logit lens applies the model’s output readout to an intermediate layer, giving a vocabulary distribution at that point. Comparing layers can show how a possible next-token prediction changes.</p><p><strong>Needs:</strong> A runnable language model, input, activations, and compatible output readout. Intermediate layers may use a different representation, so the readout can mislead. A tuned lens trains a separate translator to address this.</p></details>
+            <p class="article-link"><a href="methods/logit-lens.html">Read the guide →</a></p>
           </article>
           <article>
             <h3>Sparse autoencoders (SAEs)</h3><p>Find sparse features in model activations. <a href="https://arxiv.org/abs/2309.08600">Paper ↗</a></p>
-            <details><summary>Learn more</summary><p>An SAE learns to reconstruct activations using a larger set of features, with only a few active at once. Looking at examples that activate a feature can help a researcher form a hypothesis about what it represents.</p><p><strong>Needs:</strong> Representative activations and an SAE trained for the model and layer, or new training. Features can be ambiguous and depend on the training data.</p></details>
+            <p class="article-link"><a href="methods/sparse-autoencoders.html">Read the guide →</a></p>
           </article>
           <article>
             <h3>Activation inspection</h3><p>Inspect activations at layers or heads. <a href="https://github.com/TransformerLensOrg/TransformerLens">TransformerLens ↗</a></p>
-            <details><summary>Learn more</summary><p>Run inputs through the model and record intermediate values, such as layer activations or attention patterns. Comparing examples may reveal where a pattern appears or changes.</p><p><strong>Needs:</strong> A runnable model, representative inputs, and access to its internal activations. A pattern alone does not establish what caused the output.</p></details>
+            <p class="article-link"><a href="methods/activation-inspection.html">Read the guide →</a></p>
           </article>
         </div>
       </section>

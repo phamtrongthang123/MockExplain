@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="Read the weights of a convolution filter.">
+  <title>Filter inspection · MockExplain</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
+  <main class="article-page">
+    <p class="article-back"><a href="../methods.html">← Suggested methods</a></p>
+    <div class="eyebrow">METHOD GUIDE</div>
+    <h1>Filter inspection</h1>
+    <p class="article-lead">Read the weights of a convolution filter.</p>
+    <article>
+<p>A convolutional layer applies small sets of weights, called <strong>filters</strong>, across an input. Each filter produces a feature map: a value at every position where it was applied. Looking at the weights is a way to ask what kind of local pattern a filter may respond to.</p>
+<h2>The idea</h2>
+<p>At one position, the layer multiplies each input value in a local patch by the corresponding weight and adds the results. In a simplified one-dimensional example, ignoring bias:</p>
+<div class="equation" aria-label="y equals x one w one plus x two w two plus x three w three"><i>y</i> = <i>x</i><sub>1</sub><i>w</i><sub>1</sub> + <i>x</i><sub>2</sub><i>w</i><sub>2</sub> + <i>x</i><sub>3</sub><i>w</i><sub>3</sub></div>
+<p>Here <i>x</i> is the input patch, <i>w</i> the filter, and <i>y</i> the resulting value. For patch [1, 2, 3] and filter [−1, 0, 1], the result is −1 + 0 + 3 = <strong>2</strong>. The filter responds to a change across the patch. Real image filters usually have two spatial dimensions and multiple channels.</p>
+<h2>What to look for</h2>
+<p>First-layer filters in an image model can sometimes be displayed as small images. Some resemble edges or colors. Later filters operate on learned features rather than pixels, so their weights are less directly interpretable. Looking at which inputs activate them can add useful context.</p>
+<h2>What you need</h2>
+<p>Access to the convolution weights and their layout. You can inspect weights without running the model, but a visual pattern in the weights alone does not establish what the model learned or why it made a prediction.</p>
+</article>
+    <div class="article-sources"><strong>Read more:</strong> <a href="https://distill.pub/2020/circuits/visualizing-weights/">Visualizing Weights ↗</a></div>
+    <footer>MockExplain · <a href="../methods.html">All methods</a> · <a href="../index.html">User guide</a></footer>
+  </main>
+</body>
+</html>

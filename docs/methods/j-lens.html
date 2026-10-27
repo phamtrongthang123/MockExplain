@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="Read an intermediate activation in vocabulary space.">
+  <title>J-lens · MockExplain</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
+  <main class="article-page">
+    <p class="article-back"><a href="../methods.html">← Suggested methods</a></p>
+    <div class="eyebrow">METHOD GUIDE</div>
+    <h1>J-lens</h1>
+    <p class="article-lead">Read an intermediate activation in vocabulary space.</p>
+    <article>
+<p>The Jacobian lens, or J-lens, is a way to examine an internal language-model activation as a ranked list of tokens. It asks which tokens that activation is, on average across contexts, disposed to make the model say. The readout is an approximation, not a transcript of everything the model represents.</p>
+<h2>The idea</h2>
+<p>A Jacobian describes how a small change to an activation affects a later activation. J-lens averages these local derivatives across a corpus and uses the resulting matrix to map an intermediate activation into the final-layer space. In a simplified form:</p>
+<div class="equation" aria-label="J sub l equals the average derivative of the final hidden state with respect to h sub l"> <i>J</i><sub>ℓ</sub> = average(∂<i>h</i><sub>final</sub> / ∂<i>h</i><sub>ℓ</sub>)</div>
+<div class="equation" aria-label="token scores approximately equal W U times J sub l times h sub l">scores ≈ <i>W</i><sub>U</sub> <i>J</i><sub>ℓ</sub> <i>h</i><sub>ℓ</sub></div>
+<p><i>h</i><sub>ℓ</sub> is the activation at layer ℓ, <i>J</i><sub>ℓ</sub> is the averaged mapping, and <i>W</i><sub>U</sub> maps the result to token scores. The first equation omits the details of averaging across prompts and token positions.</p>
+<h2>A tiny example</h2>
+<p>Imagine a two-dimensional activation [2, 1] and a fitted mapping that swaps its coordinates. The mapped vector is [1, 2]. If a toy output readout assigns one token to each coordinate, the second token receives the higher score. Real lenses use many dimensions and vocabulary tokens.</p>
+<h2>What you need</h2>
+<p>A compatible language model, tokenizer, input, activations, and a fitted J-lens—or a corpus-based fitting step. Its averaged linear readout can miss context-specific effects and concepts that span multiple tokens.</p>
+</article>
+    <div class="article-sources"><strong>Read more:</strong> <a href="https://arxiv.org/abs/2607.15495">J-lens paper ↗</a> · <a href="https://github.com/anthropics/jacobian-lens">Reference implementation ↗</a></div>
+    <footer>MockExplain · <a href="../methods.html">All methods</a> · <a href="../index.html">User guide</a></footer>
+  </main>
+</body>
+</html>

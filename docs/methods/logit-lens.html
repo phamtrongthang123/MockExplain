@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="See a possible next-token prediction at an intermediate layer.">
+  <title>Logit lens · MockExplain</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
+  <main class="article-page">
+    <p class="article-back"><a href="../methods.html">← Suggested methods</a></p>
+    <div class="eyebrow">METHOD GUIDE</div>
+    <h1>Logit lens</h1>
+    <p class="article-lead">See a possible next-token prediction at an intermediate layer.</p>
+    <article>
+<p>A language model refines its representation as it processes text. The logit lens takes an intermediate activation and applies the model’s final output readout to it. Repeating this across layers gives a series of vocabulary distributions to inspect.</p>
+<h2>The idea</h2>
+<div class="equation" aria-label="p sub l equals softmax of U applied to the normalized hidden state h sub l"> <i>p</i><sub>ℓ</sub> = softmax(<i>U</i>(norm(<i>h</i><sub>ℓ</sub>)))</div>
+<p><i>h</i><sub>ℓ</sub> is the intermediate activation, norm is the model’s final normalization, and <i>U</i> is its output projection. Softmax converts the resulting token scores into a probability distribution. The exact readout depends on the model architecture.</p>
+<h2>A tiny example</h2>
+<p>For a toy vocabulary with only “cat” and “dog,” suppose an intermediate readout gives scores [2, 0]. Softmax gives approximately [0.88, 0.12], so “cat” leads in that readout. A later layer may give a different distribution. This is a toy calculation, not a prediction measured from a model.</p>
+<h2>What you need</h2>
+<p>A runnable language model, tokenizer, input, intermediate activations, and access to the final readout. The plain logit lens assumes the final readout is meaningful at earlier layers; representation changes can make it misleading. The <strong>tuned lens</strong> addresses this by fitting a separate translator for each layer before applying the readout.</p>
+</article>
+    <div class="article-sources"><strong>Read more:</strong> <a href="https://arxiv.org/abs/2303.08112">Tuned Lens paper ↗</a> · <a href="https://github.com/AlignmentResearch/tuned-lens/blob/main/tuned_lens/nn/lenses.py">Lens implementations ↗</a></div>
+    <footer>MockExplain · <a href="../methods.html">All methods</a> · <a href="../index.html">User guide</a></footer>
+  </main>
+</body>
+</html>

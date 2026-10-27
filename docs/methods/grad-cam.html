@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7faf8">
+  <meta name="description" content="Make a heatmap for a chosen model output.">
+  <title>Grad-CAM · MockExplain</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="../index.html">MockExplain <span>docs</span></a><a href="../methods.html">← All methods</a></header>
+  <main class="article-page">
+    <p class="article-back"><a href="../methods.html">← Suggested methods</a></p>
+    <div class="eyebrow">METHOD GUIDE</div>
+    <h1>Grad-CAM</h1>
+    <p class="article-lead">Make a heatmap for a chosen model output.</p>
+    <article>
+<p>Grad-CAM asks: for this input and this output score, which spatial regions have a positive association with that score? It combines a convolutional layer’s feature maps with gradients and produces a coarse heatmap that can be overlaid on an image.</p>
+<h2>The idea</h2>
+<p>First, average the gradient of the chosen score over each feature map. Then use those averages to combine the maps:</p>
+<div class="equation" aria-label="alpha k equals one over Z times the sum over i and j of the derivative of the score y with respect to feature map A k i j">α<sub>k</sub> = (1 / <i>Z</i>) Σ<sub>i,j</sub> ∂<i>y</i><sup>c</sup> / ∂<i>A</i><sup>k</sup><sub>ij</sub></div>
+<div class="equation" aria-label="heatmap L equals ReLU of the sum over k of alpha k times feature map A k"><i>L</i><sup>c</sup> = ReLU(Σ<sub>k</sub> α<sub>k</sub><i>A</i><sup>k</sup>)</div>
+<p><i>y</i><sup>c</sup> is the chosen output score (usually before softmax), <i>A</i><sup>k</sup> is feature map <i>k</i>, and <i>Z</i> is its number of spatial positions. ReLU keeps positive values and sets negative values to zero.</p>
+<h2>A tiny example</h2>
+<p>At one location, suppose two feature maps have values 3 and 1 and their gradient weights are 2 and −1. The heatmap value is ReLU(2 × 3 − 1 × 1) = <strong>5</strong>. Repeating this at each location gives a map; the map is typically resized to the input image.</p>
+<h2>What you need</h2>
+<p>A runnable model, an input, a target score, a spatial convolutional layer, and gradients. A bright region highlights positive evidence in this approximation; it does not prove that the region caused the prediction. The map’s resolution is limited by the selected feature maps.</p>
+</article>
+    <div class="article-sources"><strong>Read more:</strong> <a href="https://arxiv.org/abs/1610.02391">Grad-CAM paper ↗</a></div>
+    <footer>MockExplain · <a href="../methods.html">All methods</a> · <a href="../index.html">User guide</a></footer>
+  </main>
+</body>
+</html>
